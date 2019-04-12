@@ -10,7 +10,7 @@ Spring Cloud Stream can do the heavy lifting, abstracting away the complicated s
 
 ## How to run the demo
 
-1. Start two terminal windows. In the fist, start your local Kafka server on Docker. You can use the `run-kafka.sh` script in this folder to get your single node cluster running.
+1. Start two terminal windows. In the first, start your local Kafka server on Docker. You can use the `run-kafka.sh` script in this folder to get your single node cluster running.
 
 2. Next, `cd` to the `loansink` folder and then type `./mvnw package spring-boot:run`
 
