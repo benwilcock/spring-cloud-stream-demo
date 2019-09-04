@@ -31,6 +31,7 @@ public class LoancheckApplication {
 
 		ApprovedSender approver;
 		DeclinedSender decliner;
+		Long MAX_AMOUNT = 1000L;
 
 		@Autowired
 		public LoanChecker(ApprovedSender approver, DeclinedSender decliner) {
@@ -42,7 +43,7 @@ public class LoancheckApplication {
 		public void process(LoanApplication application) {
 			LOG.info("Application {} for ${} for {}", application.getUuid(), application.getAmount(), application.getName());
 
-			if(application.getName().equalsIgnoreCase("Kim")){
+			if(application.getAmount() > MAX_AMOUNT){
 				decliner.decline(application);
 			} else {
 				approver.approve(application);
