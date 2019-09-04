@@ -19,7 +19,6 @@ import java.util.List;
 public class LoancheckApplication {
 
 	public static final Logger LOG = LoggerFactory.getLogger(LoancheckApplication.class);
-	public static final List<LoanApplication> applications = new ArrayList<>();
 
 	public static void main(String[] args) {
 		SpringApplication.run(LoancheckApplication.class, args);
@@ -40,13 +39,13 @@ public class LoancheckApplication {
 		}
 
 		@StreamListener(ApplicationsBinding.APPLICATIONS_IN)
-		public void process(LoanApplication application) {
-			LOG.info("Application {} for ${} for {}", application.getUuid(), application.getAmount(), application.getName());
+		public void process(Loan loan) {
+			LOG.info("Application {} for ${} for {}", loan.getUuid(), loan.getAmount(), loan.getName());
 
-			if(application.getAmount() > MAX_AMOUNT){
-				decliner.decline(application);
+			if(loan.getAmount() > MAX_AMOUNT){
+				decliner.decline(loan);
 			} else {
-				approver.approve(application);
+				approver.approve(loan);
 			}
 		}
 	}
@@ -55,10 +54,10 @@ public class LoancheckApplication {
 	public static class ApprovedSender{
 
 		@SendTo(ApplicationsBinding.APPROVED_OUT)
-		public LoanApplication approve(LoanApplication application){
-			application.setStatus(Statuses.APPROVED.name());
-			LOG.info("{} {} for ${} for {}", application.getStatus(), application.getUuid(), application.getAmount(), application.getName());
-			return application;
+		public Loan approve(Loan loan){
+			loan.setStatus(Statuses.APPROVED.name());
+			LOG.info("{} {} for ${} for {}", loan.getStatus(), loan.getUuid(), loan.getAmount(), loan.getName());
+			return loan;
 		}
 	}
 
@@ -66,10 +65,10 @@ public class LoancheckApplication {
 	public static class DeclinedSender{
 
 		@SendTo(ApplicationsBinding.DECLINED_OUT)
-		public LoanApplication decline(LoanApplication application){
-			application.setStatus(Statuses.DECLINED.name());
-			LOG.info("{} {} for ${} for {}", application.getStatus(), application.getUuid(), application.getAmount(), application.getName());
-			return application;
+		public Loan decline(Loan loan){
+			loan.setStatus(Statuses.DECLINED.name());
+			LOG.info("{} {} for ${} for {}", loan.getStatus(), loan.getUuid(), loan.getAmount(), loan.getName());
+			return loan;
 		}
 	}
 }

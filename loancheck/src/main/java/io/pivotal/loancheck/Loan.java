@@ -1,17 +1,17 @@
-package io.pivotal.loansink;
+package io.pivotal.loancheck;
 
 
 import java.util.Objects;
 
-public class LoanApplication {
+public class Loan {
 
   private String uuid, name, status;
   private long amount;
 
-  public LoanApplication() {
+  public Loan() {
   }
 
-  public LoanApplication(String uuid, String name, long amount) {
+  public Loan(String uuid, String name, long amount) {
     this.uuid = uuid;
     this.name = name;
     this.amount = amount;
@@ -49,7 +49,7 @@ public class LoanApplication {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    LoanApplication that = (LoanApplication) o;
+    Loan that = (Loan) o;
     return amount == that.amount &&
             uuid.equals(that.uuid) &&
             name.equals(that.name) &&
@@ -63,7 +63,7 @@ public class LoanApplication {
 
   @Override
   public String toString() {
-    return "LoanApplication{" +
+    return "Loan{" +
             "uuid='" + uuid + '\'' +
             ", name='" + name + '\'' +
             ", status='" + status + '\'' +

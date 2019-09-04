@@ -43,9 +43,9 @@ public class LoansinkApplication {
     public void timerMessageSource() {
       String rName = names.get(new Random().nextInt(names.size()));
       Long rAmount = amounts.get(new Random().nextInt(amounts.size()));
-      LoanApplication application = new LoanApplication(UUID.randomUUID().toString(), rName, rAmount);
-      LOG.info("Created: {}", application);
-      applicationsOut.send(new GenericMessage<LoanApplication>(application));
+      Loan loan = new Loan(UUID.randomUUID().toString(), rName, rAmount);
+      LOG.info("Created: {}", loan);
+      applicationsOut.send(new GenericMessage<Loan>(loan));
     }
   }
 
