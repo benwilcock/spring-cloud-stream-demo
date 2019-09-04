@@ -22,9 +22,15 @@ In a fresh terminal window, go to the root folder of this repository and issue t
 ./docker-compose up
 ```
 
-#### Step 2: Decide which version you want to try, Kafka or Rabbit
+#### Step 2: Decide which mode you want to try, Kafka or Rabbit
 
-If you want to run the code against Kafka, in the following commands, where it says `-P<profile-choice>` substitute `-Pkafka` in the maven commands. Alternatively, if you want to run the code against RabbitMQ, in the following commands, where it says `-P<profile-choice>` substitute the profile `-Prabbit`. 
+##### For Kafka
+
+If you want to run the code against Kafka, in the following Maven commands, where it says `-P<profile-choice>` substitute **`-Pkafka`**. 
+
+##### For RabbitMQ
+
+If you want to run the code against RabbitMQ, in the following Maven commands, where it says `-P<profile-choice>` substitute the profile **`-Prabbit`**. 
 
 #### Step 3: Generate some messages
 
