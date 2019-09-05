@@ -78,6 +78,9 @@
             <properties>
                 <spring.profile.activated>rabbit</spring.profile.activated>
             </properties>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
             <dependencies>
                 <dependency>
                     <groupId>org.springframework.cloud</groupId>

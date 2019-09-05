@@ -34,7 +34,7 @@ If you want to run the code against RabbitMQ, in the following Maven commands, w
 
 #### Step 3: Generate some messages
 
-In a fresh terminal window, make the `/loansink` directory the current directory, and then issue the following command (substituting the profile name as discussed in step 2 above).
+In a fresh terminal window, make the `/loansource` directory the current directory, and then issue the following command (substituting the profile name as discussed in step 2 above).
 
 ```bash
 ./mvnw package spring-boot:run -DskipTests=true -P<profile-choice>
@@ -58,7 +58,9 @@ Once you're done, press `ctrl-c` in each terminal window to stop the microservic
 
 ## How it works
 
-Both apps are configured using a combination of Spring Boot autoconfiguration (based on dependencies) and regular `application.properties` entries (of which there are very few). Your chosen Maven profile controls which Spring Cloud Stream bindings are added as dependencies. If you choose `-Pkafka` then the `spring-cloud-stream-binder-kafka` JAR is added. If you choose `-Prabbit` then the `spring-cloud-stream-binder-rabbit` JAR is added. Your choice also influences the `spring.profiles.active` property and the banner used at boot time (just so it's clear which mode you're running with in the console when you start).
+Both apps are configured using a combination of Spring Boot autoconfiguration (based on dependencies) and regular `application.properties` entries (of which there are very few). 
+
+Your chosen Maven profile controls which Spring Cloud Stream bindings are added as dependencies. If you choose `-Pkafka` then the `spring-cloud-stream-binder-kafka` JAR is added. If you choose `-Prabbit` then the `spring-cloud-stream-binder-rabbit` JAR is added. Your choice also influences the `spring.profiles.active` property and the banner used at boot time (just so it's clear which mode you're running with in the console when you start).
 
 The `loansink` application you started is generating `Loan` objects and serialising them as messages onto a Spring Cloud Stream topic called "applications". Under the hood, Spring Cloud Stream is working with either Kafka or RabbitMQ to establish the necessary messaging topic. The `loansink` is using the Spring scheduling feature alongside Spring Cloud Stream messaging to generate application messages and put them on the messaging topic.
 
