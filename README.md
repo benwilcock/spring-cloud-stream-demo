@@ -10,13 +10,13 @@ Spring Cloud Stream can abstract away the complicated setup and integration plum
 
 ## How to run the demo
 
-This demo has two modes (implemented as Maven profiles) - Kafka or RabbitMQ.
+This demo has two modes (implemented as Maven profiles) - Kafka mode or RabbitMQ mode. Which you choose is entirely up to you. 
 
 #### Step 1: Start the messaging servers
 
-To make this simple, we'll use docker-compose and we'll start Kafka and Rabbit at the same time and leave them running in the background.
+To make this simple, we'll use `docker-compose` and we'll start both the Kafka and Rabbit servers at the same time and leave them running in the background.
 
-In a fresh terminal window, go to the root folder of this repository and issue the following command.
+To start them up, in a fresh terminal window, go to the root folder of this repository and issue the following command.
 
 ```bash
 ./docker-compose up
