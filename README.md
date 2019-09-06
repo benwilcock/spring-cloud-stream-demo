@@ -2,11 +2,11 @@
 
 ## Problem
 
-You just want to write logic for your event driven application, but the boilerplate messaging code keeps getting and it's costing your time.  Connecting your apps to messaging servers is too cumbersome and you may even need to work with multiple messaging technologies in your work depending on the domain you're working in.
+You just want to write logic for your event driven application, but the boilerplate messaging code keeps getting in the way and it's costing you time.  Connecting your apps to messaging servers is cumbersome and you need to work with multiple messaging technologies in your work depending on the domain you're working in.
 
 ## Solution
 
-Spring Cloud Stream takes care of the complicated boilerplate setup code, leaving you with nice clean business logic which anyone can maintain.  Spring Cloud Stream unifies many disparate messaging protocols behind one, easy to use API and it's designed to smooth away any subtle differences in approach or features (like partitioning or exchanges for example) so that you can concentrate on building a solution that "just works".
+Spring Cloud Stream. Spring Cloud Stream takes care of the complicated boilerplate code for you, leaving you free to create nice clean business logic which anyone can maintain.  Spring Cloud Stream seamlessly unifies many different messaging protocols behind one easy to use API and it smoothes away any subtle differences in approach or features (like partitioning or exchanges for example) so that you can concentrate on building event-driven solutions that "just work".
 
 ## About this Demo
 
@@ -45,7 +45,7 @@ In a new terminal window, make the `/loansource` directory the current directory
 ./mvnw package spring-boot:run -DskipTests=true -P<profile-choice>
 ```
 
-Once started, in the log output in the terminal window, you should see a message every second telling you that a new Loan application has been created and sent for processing.
+Once the application has started, in the terminal window, you should see a message every second telling you that a new Loan application has been created.
 
 #### Step 4: Process some messages
 
