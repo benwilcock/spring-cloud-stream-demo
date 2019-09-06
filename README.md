@@ -19,8 +19,10 @@ To make this simple, we'll use `docker-compose` and we'll start both the Kafka a
 To start them up, in a fresh terminal window, go to the root folder of this repository and issue the following command.
 
 ```bash
-./docker-compose up
+./start-servers.sh
 ```
+
+This script will start Kafka and Rabbit and stream the log output from both until you exit with `Ctrl-C`. Note that the servers won't stop (they're in demon mode), only the log messages.
 
 #### Step 2: Decide which mode you want to try, Kafka or Rabbit
 
@@ -54,23 +56,35 @@ Once started, in the log output in the terminal window, you should see a message
 
 #### Step 5: Tidy Up
 
-Once you're done, press `ctrl-c` in each terminal window to stop the microservices and stop the messaging servers.
+Once you're done with the applications, in the terminal windows for the `Loansource` and the `Loancheck` applications press `Ctrl-C`. 
+
+If you're switching modes between Kafks and Rabbit, simply go back to **Step 2** and repeat the process.
+
+If you're completely done with the demo: to stop the Kafka and Rabbit servers in a terminal window in the root folder of the project, run the `./stop-servers.sh` script. This isn't necessary if you're just switching between modes.
 
 ## How it works
 
-Both apps are configured using a combination of Spring Boot autoconfiguration (based on dependencies) and regular `application.properties` entries (of which there are very few). 
+Both apps are configured using a combination of Spring Boot autoconfiguration (based on dependencies) and regular `application.properties` entries (of which there are very few).
 
-Your chosen Maven profile controls which Spring Cloud Stream bindings are added as dependencies. If you choose `-Pkafka` then the `spring-cloud-stream-binder-kafka` JAR is added. If you choose `-Prabbit` then the `spring-cloud-stream-binder-rabbit` JAR is added. Your choice also influences the `spring.profiles.active` property and the banner used at boot time (just so it's clear which mode you're running with in the console when you start).
+Your chosen Maven profile controls which Spring Cloud Stream bindings are added as dependencies at compile time. If you choose `-Pkafka` then the `spring-cloud-stream-binder-kafka` JAR is added to the project. If you choose `-Prabbit` then the `spring-cloud-stream-binder-rabbit` JAR is added. Your choice also influences the `spring.profiles.active` property and switches the banner used at boot time (just so it's clear which mode you're running in when you start up).
 
-The `loansink` application you started is generating `Loan` objects and serialising them as messages onto a Spring Cloud Stream topic called "applications". Under the hood, Spring Cloud Stream is working with either Kafka or RabbitMQ to establish the necessary messaging topic. The `loansink` is using the Spring scheduling feature alongside Spring Cloud Stream messaging to generate application messages and put them on the messaging topic.
+#### The Loansource Application
+
+The `@EnableBinding` annotation declared on the `LoansourceApplication` is acting as a `Source` of messages. By declaring our class as a `Source` will are asking Spring Cloud Stream to create a `MessageChannel` (which is called "output" by default). Any messages we create will be placed on this channel. Spring Cloud Stream will take care of creating this channel using our underlying messaging technology (either Rabbit or Kafka in this demo, depending on the Maven profile chosen).
+
+The `LoansourceApplication` defines a @Bean method which returns a `Supplier<>` (a Spring Cloud Function. This function simply generates `Loan` objects. Because this function's method name is declared in the `spring.cloud.stream.function.definition` property in the `application.properties`, these generated Loan objects are then automatically sent as messages on our message channel established above.
+
+#### The Loancheck Application
 
 Similarly, the `loancheck` application you started is subscribing to the messages coming from the `applications` topic and then sending them into either the `approved` or `declined` topics based on the message's content (specifically the amount of the loan, similar to a fraud checking facility).
 
 You'll notice there is zero Kafka or RabbitMQ specific code in this sample. This means the solution can focus almost exclusively on the business logic, bar a few configuration items.
 
-This allows you to focus on the business logic and use exactly the same solution on different messaging platforms. You could swap out Kafka or RabbitMQ for any of the other supported messaging solutions simply by changing the "binder" dependencies in the application POMs.
+## Final Thoughts
 
-## Theres more
+As you can see, the separation of concerns introduced between the messaging logic and the messaging infrastructure is very healthy. It allows developers to focus on the business logic regardless of the messaging platform. You have very little messaging boilerplate and you can easily swap messaging solutions simply by changing the "binder" dependencies in the application POM.
+
+## Theres more...
 
 Keep up to date with the latest information on Spring Cloud Stream visit the projects dedicated [website][1]. At the time of writing, the messaging platforms supported by Spring Cloud Stream include Kafka, RabbitMQ, Amazon Kinesis, Google PubSub, and Azure Event Hub.
 

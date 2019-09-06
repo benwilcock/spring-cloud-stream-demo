@@ -3,6 +3,10 @@ package io.pivotal.loansource;
 
 import java.util.Objects;
 
+
+/**
+ * This class defines a loan. It is associated with an applicant, has an amount, and a status.
+ */
 public class Loan {
 
   private String uuid, name, status;
