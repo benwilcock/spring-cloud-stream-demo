@@ -2,15 +2,21 @@
 
 ## Problem
 
-Event driven architecture often uses messaging but connecting and using messaging servers can be cumbersome. Furthermore, enterprises often need to use several different messaging technologies within one domain. Code can get so complex and so proprietary that flexibility is reduced.
+You just want to write logic for your event driven application, but the boilerplate messaging code keeps getting and it's costing your time.  Connecting your apps to messaging servers is too cumbersome and you may even need to work with multiple messaging technologies in your work depending on the domain you're working in.
 
 ## Solution
 
-Spring Cloud Stream can abstract away the complicated setup and integration plumbing leaving you with nice clean code which anyone can maintain.  Spring Cloud Stream unifies many disparate messaging protocols behind one, easy to use API. Spring Cloud Stream is designed to smooth away any subtle differences in approach or features (like partitioning for example) so that you can concentrate on building the solution rather than compensating for shortfalls or incompatibilities between messaging implementations. 
+Spring Cloud Stream takes care of the complicated boilerplate setup code, leaving you with nice clean business logic which anyone can maintain.  Spring Cloud Stream unifies many disparate messaging protocols behind one, easy to use API and it's designed to smooth away any subtle differences in approach or features (like partitioning or exchanges for example) so that you can concentrate on building a solution that "just works".
 
-## How to run the demo
+## About this Demo
 
-This demo has two modes (implemented as Maven profiles) - Kafka mode or RabbitMQ mode. Which you choose is entirely up to you. 
+In this code demo you'll see how Spring Cloud Stream's handy abstractions help make your stream handling code cleaner and easier to work with. You'll also see how easy it is to switch between messaging technologies using Spring Cloud Stream's `bindings`.
+
+This demo comes with two modes built-in: Kafka Mode or RabbitMQ Mode. Which you choose is entirely up to you. They're implemented as Maven profiles, so you can choose your preferred mode at compile time.
+
+## Getting Started
+
+To run the demo, follow these simple steps...
 
 #### Step 1: Start the messaging servers
 
@@ -24,19 +30,16 @@ To start them up, in a fresh terminal window, go to the root folder of this repo
 
 This script will start Kafka and Rabbit and stream the log output from both until you exit with `Ctrl-C`. Note that the servers won't stop (they're in demon mode), only the log messages.
 
-#### Step 2: Decide which mode you want to try, Kafka or Rabbit
+#### Step 2: Decide which mode you want to try (Kafka or Rabbit)
 
-##### For Kafka
+In steps 3 & 4 which follow, the Maven commands, where it says `-P<profile-choice>` you must substitute the name of the mode which you'd like to run with.
 
-If you want to run the code against Kafka, in the following Maven commands, where it says `-P<profile-choice>` substitute **`-Pkafka`**. 
-
-##### For RabbitMQ
-
-If you want to run the code against RabbitMQ, in the following Maven commands, where it says `-P<profile-choice>` substitute the profile **`-Prabbit`**. 
+* For **Kafka** mode, substitute: **`-Pkafka`**
+* For **RabbitMQ** mode, substitute: **`-Prabbit`** 
 
 #### Step 3: Generate some messages
 
-In a fresh terminal window, make the `/loansource` directory the current directory, and then issue the following command (substituting the profile name as discussed in step 2 above).
+In a new terminal window, make the `/loansource` directory the current directory, and then issue the following command (substituting the profile name as discussed in step 2 above).
 
 ```bash
 ./mvnw package spring-boot:run -DskipTests=true -P<profile-choice>
@@ -46,7 +49,7 @@ Once started, in the log output in the terminal window, you should see a message
 
 #### Step 4: Process some messages
 
-In a fresh terminal window, make the `/loancheck` directory the current directory, and then issue the following command (substituting the profile name as discussed in step 2 above).
+In another new terminal window, make the `/loancheck` directory the current directory, and then issue the following command (substituting the profile name as discussed in step 2 above).
 
 ```bash
 ./mvnw package spring-boot:run -DskipTests=true -P<profile-choice>
@@ -84,7 +87,7 @@ You'll notice there is zero Kafka or RabbitMQ specific code in this sample. This
 
 As you can see, the separation of concerns introduced between the messaging logic and the messaging infrastructure is very healthy. It allows developers to focus on the business logic regardless of the messaging platform. You have very little messaging boilerplate and you can easily swap messaging solutions simply by changing the "binder" dependencies in the application POM.
 
-## Theres more...
+## There's more...
 
 Keep up to date with the latest information on Spring Cloud Stream visit the projects dedicated [website][1]. At the time of writing, the messaging platforms supported by Spring Cloud Stream include Kafka, RabbitMQ, Amazon Kinesis, Google PubSub, and Azure Event Hub.
 
