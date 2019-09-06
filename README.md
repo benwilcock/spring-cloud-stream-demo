@@ -12,7 +12,9 @@ Spring Cloud Stream. Spring Cloud Stream takes care of the complicated boilerpla
 
 In this code demo you'll see how Spring Cloud Stream's handy abstractions help make your stream handling code cleaner and easier to work with. You'll also see how easy it is to switch between messaging technologies using Spring Cloud Stream's `bindings`.
 
-This demo comes with two built-in modes: **Kafka Mode** or **RabbitMQ Mode**. Which you choose is entirely up to you. They're implemented as Maven profiles, so you can select your preferred mode at compile time.
+This demo comes with two built-in modes: **Kafka Mode** or **RabbitMQ Mode**. Which you choose is entirely up to you. They're implemented as Maven profiles, so you can select your preferred mode at compile time. 
+
+> Make sure you choose the same profile in each app you run!
 
 ## Getting Started
 
