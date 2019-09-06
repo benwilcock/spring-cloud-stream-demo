@@ -12,9 +12,7 @@ Spring Cloud Stream. Spring Cloud Stream takes care of the complicated boilerpla
 
 In this code demo you'll see how Spring Cloud Stream's handy abstractions help make your stream handling code cleaner and easier to work with. You'll also see how easy it is to switch between messaging technologies using Spring Cloud Stream's `bindings`.
 
-This demo comes with two built-in modes: **Kafka Mode** or **RabbitMQ Mode**. Which you choose is entirely up to you. They're implemented as Maven profiles, so you can select your preferred mode at compile time. 
-
-> Make sure you choose the same profile in each app you run!
+This demo comes with two built-in modes: **Kafka Mode** or **RabbitMQ Mode**. Which you choose is entirely up to you. They're implemented as Maven profiles, so you can select your preferred mode at compile time.
 
 ## Getting Started
 
@@ -34,10 +32,12 @@ This script will start Kafka and Rabbit and stream the log output from both unti
 
 #### Step 2: Decide which mode you want to try (Kafka or Rabbit)
 
-In steps 3 & 4 which follow, the Maven commands, where it says `-P<profile-choice>` you must substitute the name of the mode which you'd like to run with.
+In steps 3 & 4 which follow, where we issue Maven commands to compile and run the applications, you must substitute the `-P<profile-choice>` with the name of the mode in which you'd like run.
 
 * For **Kafka** mode, substitute: **`-Pkafka`**
 * For **RabbitMQ** mode, substitute: **`-Prabbit`** 
+
+> This demo is not designed to bridge messages between Kafka and Rabbit, so be sure to make same profile choice in both of the apps when you compile and run them.
 
 #### Step 3: Generate some messages
 
