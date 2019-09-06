@@ -37,7 +37,7 @@ In steps 3 & 4 which follow, where we issue Maven commands to compile and run th
 * For **Kafka** mode, substitute: **`-Pkafka`**
 * For **RabbitMQ** mode, substitute: **`-Prabbit`** 
 
-> This demo is not designed to bridge messages between Kafka and Rabbit, so be sure to make same profile choice in both of the apps when you compile and run them.
+> This demo is not designed to bridge messages between Kafka and Rabbit, so be sure to choose the same profile in both of the apps when you compile and run them.
 
 #### Step 3: Generate some messages
 
@@ -77,7 +77,7 @@ Your chosen Maven profile controls which Spring Cloud Stream bindings are added 
 
 The `@EnableBinding` annotation declared on the `LoansourceApplication` is acting as a `Source` of messages. By declaring our class as a `Source` will are asking Spring Cloud Stream to create a `MessageChannel` (which is called "output" by default). Any messages we create will be placed on this channel. Spring Cloud Stream will take care of creating this channel using our underlying messaging technology (either Rabbit or Kafka in this demo, depending on the Maven profile chosen).
 
-The `LoansourceApplication` defines a @Bean method which returns a `Supplier<>` (a Spring Cloud Function. This function simply generates `Loan` objects. Because this function's method name is declared in the `spring.cloud.stream.function.definition` property in the `application.properties`, these generated Loan objects are then automatically sent as messages on our message channel established above.
+The `LoansourceApplication` defines an `@Bean` method which returns a `Supplier<>` (a Spring Cloud Function. This function simply generates `Loan` objects. Because this function's method name is declared in the `spring.cloud.stream.function.definition` property in the `application.properties`, these generated Loan objects are then automatically sent as messages on our message channel established above. What's also nice about this is that you can unit test the function method in complete isolation.
 
 #### The Loancheck Application
 

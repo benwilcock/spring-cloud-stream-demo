@@ -6,7 +6,7 @@ import org.springframework.messaging.MessageChannel;
 import org.springframework.stereotype.Component;
 
 @Component
-public interface ApplicationsBinding {
+public interface LoanApplicationsBinding {
 
   String APPLICATIONS_IN = "applications";
   String APPROVED_OUT = "approved";
