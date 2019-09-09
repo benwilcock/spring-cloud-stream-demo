@@ -24,7 +24,7 @@ import java.util.function.Supplier;
  */
 
 @SpringBootApplication
-@EnableBinding(Source.class)
+//@EnableBinding(Source.class)
 public class LoansourceApplication {
 
   private static final Logger LOG = LoggerFactory.getLogger(LoansourceApplication.class);
