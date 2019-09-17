@@ -11,5 +11,5 @@ For the rest of this recipe [see here][recipe].
 For the Spring Cloud Stream documentation [see here][stream-docs].
 
 
-[recipe]: docs/index.md
+[recipe]: https://benwilcock.github.io/spring-cloud-stream-demo/
 [stream-docs]: https://docs.spring.io/spring-cloud-stream/docs/current/reference/htmlsingle/
