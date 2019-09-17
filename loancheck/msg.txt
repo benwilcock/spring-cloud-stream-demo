@@ -1,0 +1,22 @@
+{"uuid":"25fc3b08-5a6b-42bd-ba7b-542f89510de3","name":"Angela","status":"PENDING","amount":100000000}
+
+Exchange     output
+Routing Key     output
+
+Properties     
+
+timestamp:    1568711840
+message_id:    d8f0a0ff-0760-6f91-84e3-9b0586941afb
+priority:    0
+delivery_mode:    2
+
+headers:    
+correlationId:    54d67776-41a7-d6b6-cae9-eb5afba9c3b1
+sequenceNumber:    1
+sequenceSize:    1
+content_type:    application/json
+
+Payload 101 bytes Encoding: string
+    
+
+{"uuid":"25fc3b08-5a6b-42bd-ba7b-542f89510de3","name":"Angela","status":"PENDING","amount":100000000}
