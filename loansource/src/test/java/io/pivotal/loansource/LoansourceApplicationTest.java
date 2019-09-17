@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import java.util.function.Supplier;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 public class LoansourceApplicationTest {
 

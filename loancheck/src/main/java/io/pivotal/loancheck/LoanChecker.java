@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class LoanChecker {
 
   public static final Logger LOG = LoggerFactory.getLogger(LoanChecker.class);
-  private static final Long MAX_AMOUNT = 1000L;
+  private static final Long MAX_AMOUNT = 10000L;
   private LoanProcessor processor;
 
   @Autowired
@@ -21,10 +21,10 @@ public class LoanChecker {
   }
 
   @StreamListener(LoanProcessor.APPLICATIONS_IN)
-  public void checkAndSortLoans(Loan loan){
+  public void checkAndSortLoans(Loan loan) {
     LOG.info("{} {} for ${} for {}", loan.getStatus(), loan.getUuid(), loan.getAmount(), loan.getName());
 
-    if(loan.getAmount() > MAX_AMOUNT){
+    if (loan.getAmount() > MAX_AMOUNT) {
       loan.setStatus(Statuses.DECLINED.name());
       processor.declined().send(message(loan));
     } else {
