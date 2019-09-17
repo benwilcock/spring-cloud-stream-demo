@@ -1,4 +1,4 @@
-Event Driven Applications with Kafka *OR* RabbitMQ
+# Event Driven Applications with Kafka *OR* RabbitMQ
 
 ## Problem
 
