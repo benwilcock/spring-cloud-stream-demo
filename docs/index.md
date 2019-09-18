@@ -1,4 +1,4 @@
-# Event Driven Applications with Kafka **OR** RabbitMQ
+# Simple Event Driven Microservices
 
 ## The Problem
 
@@ -71,11 +71,48 @@ If you're completely done with the demo: to stop the Kafka and RabbitMQ servers,
 
 ## How it Works
 
-Your chosen Maven profile (`-P<profile-choice>`) controls which of the Spring Cloud Stream bindings are added as dependencies at compile time. If you chose `-Pkafka` then the `[spring-cloud-stream-binder-kafka][kafka]` JAR is added to the project. If you chose `-Prabbit` then the `[spring-cloud-stream-binder-rabbit][rabbit]` JAR is added. Your choice also influences the `spring.profiles.active` property which switches the banner you see boot time (just so it's clear which mode you're running in when you start up).
+Maven profiles control which of the Spring Cloud Stream bindings are added as dependencies when you compile the code. If you choose the **kafka** profile then the `[spring-cloud-stream-binder-kafka][kafka]` JAR is added to the project. If you choose **rabbit** profile then the `[spring-cloud-stream-binder-rabbit][rabbit]` JAR is added. Kafka is the default if no profile is specified.
+
+```xml
+<profiles>
+    <profile>
+        <id>kafka</id>
+        <properties>
+            <spring.profile.activated>kafka</spring.profile.activated>
+        </properties>
+        <activation>
+            <activeByDefault>true</activeByDefault>
+        </activation>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-stream-binder-kafka</artifactId>
+                <version>${spring-cloud-stream.version}</version>
+            </dependency>
+        </dependencies>
+    </profile>
+    ...
+<profiles>
+```
+
+Your choice of Maven profile also influences the `spring.profiles.active` property in the `src/main/resources/application.properties` file which switches the banner you see boot time (just so it's clear which mode you're running in when you start up).
 
 #### The Loansource Microservice
 
-Incredibly, all that's required to get the `LoansourceApplication` microservice to act as a source of Loan messages is to define a `@Bean` method which generates and returns a `Supplier<>` of type `Loan`. A `Supplier<>` is a Spring Cloud Function data type. Because there is only one `@Bean` of this type, Spring Cloud Stream knows exactly what to do. By default it will trigger this function one every second. The generated Loan objects are then automatically sent as messages on our default message channel (called `output`). 
+All that's required to get the `LoansourceApplication` microservice to act as a source of `Loan` messages is to declare a `@Bean` method which generates and returns a `Supplier<>`, in this case it's of type `Loan`.
+
+```java
+@Bean
+  public Supplier<Loan> supplyLoan() {
+    return () -> {
+      Loan loan = new Loan(UUID.randomUUID().toString(), "Ben", 10000L);
+      LOG.info("{} {} for ${} for {}", loan.getStatus(), loan.getUuid(), loan.getAmount(), loan.getName());
+      return loan;
+    };
+  }
+```
+
+`Supplier<>` is a Java function data type. Because there is only one `@Bean` of this type declared in this application, Spring Cloud Stream knows exactly what to do next. By default it will trigger this function once every second and send the result to the default output `MessageChannel`. The generated Loan objects are then automatically sent as messages on our default message channel (called `output`). 
 
 > What's nice about this is that you can test the function using a regular unit test.
 
@@ -103,7 +140,6 @@ public interface LoanProcessor {
 
   @Output(DECLINED_OUT)
   MessageChannel declined();
-
 }
 ```
 
@@ -128,7 +164,7 @@ If you'd like to go deeper with Spring and pure Kafka? Check out these great blo
 2. [Soby Chacko: Spring for Apache Kafka Deep Dive: Apache Kafka and Spring Cloud Stream][blog2]
 
 [project]: https://spring.io/projects/spring-cloud-stream
-[docs]: https://github.com/spring-cloud/spring-cloud-gcp/tree/master/spring-cloud-gcp-pubsub-stream-binder
+[docs]: https://docs.spring.io/spring-cloud-stream/docs/current/reference/htmlsingle/
 [initializr]: https://start.spring.io
 [multi-connect]:https://cloud.spring.io/spring-cloud-static/spring-cloud-stream/2.2.1.RELEASE/spring-cloud-stream.html#multiple-systems
 
