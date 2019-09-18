@@ -10,7 +10,7 @@ For the rest of this recipe [see the website here][recipe].
 
 ## Pre-requisites
 
-The event driven applications are built on: [Spring Boot][boot], [Spring Cloud Stream][stream], [Maven][maven], and [Java 11][java].
+These event driven applications are built on: [Spring Boot][boot], [Spring Cloud Stream][stream], [Maven][maven], and [Java 11][java].
 
 This server-side runs on [Docker for Mac][docker] and includes: [Kafka][kafka], [Zookeeper][zookeeper], [RabbitMQ][rabbit], and [KafDrop][kafdrop] (image by by Obsidian Dynamics).
 

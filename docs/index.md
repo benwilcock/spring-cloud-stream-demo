@@ -28,9 +28,9 @@ In a fresh terminal window, go to the root folder of this repository and issue t
 ./start-servers.sh
 ```
 
-This script will start Kafka and RabbitMQ and stream the log output from both until you exit with `Ctrl-C`. 
+This script will start Kafka and RabbitMQ and stream the log output from both until you exit with `Ctrl-C`. The servers will all be available to any applications on `localhost` and can be connected to using their default ports.
 
-> Note: The servers won't stop (they're running in the background), only the log messages will.
+> Note: The servers won't stop when you press `Ctrl-C` (they're running in the background), only the log messages will.
 
 #### Step 2: Choose Between Kafka or Rabbit Mode
 
@@ -145,6 +145,12 @@ A `@Component` called the `LoanChecker` receives this `LoanProcessor` in it's co
 
 The `Loan` objects are then sorted using simple business logic, and depending on the outcome, sent to either the `processor.approved()` channel or the `processor.declined()` channel (after having their status set accordingly).
 
+#### Observing the Event Messages
+
+For **Kafka** the [KafDrop][kafdrop] tool on [`localhost:9000`][kafdrop-ui] may be used to observe the topics and the event messages. There is no login required.
+
+For **RabbitMQ** the Rabbit Management Console can be found on [`localhost:15672`][rabbit-ui] may be used to observe the exchanges and the event messages. To login the username is `guest` and the password is also `guest`. To observe actual message content, you may need to create a queue manually and bind it to the topic using `#` as your routing key.
+
 ## Final Thoughts
 
 That's it! As you can see, the separation of concerns introduced between the messaging logic and the messaging infrastructure is very healthy indeed. There is absolutely zero Kafka or RabbitMQ specific code in either application. This allows developers to focus on the business logic regardless of the messaging platform. There is very little messaging boilerplate and you can easily swap messaging solutions simply by changing the "binder" dependencies in the application POM.
@@ -171,6 +177,12 @@ If you'd like to go deeper with Spring and pure Kafka? Check out these great blo
 [amazon]: https://github.com/spring-cloud/spring-cloud-stream-binder-aws-kinesis
 [azure]: https://github.com/microsoft/spring-cloud-azure/tree/master/spring-cloud-azure-stream-binder/spring-cloud-azure-eventhubs-stream-binder
 [google]: https://github.com/spring-cloud/spring-cloud-gcp/tree/master/spring-cloud-gcp-pubsub-stream-binder
+
+[kafka-project]: https://kafka.apache.org/
+[rabbit-project]: https://www.rabbitmq.com/
+[kafdrop]: https://hub.docker.com/r/obsidiandynamics/kafdrop
+[kafdrop-ui]: http://localhost:9000
+[rabbit-ui]: http://localhost:15672
 
 [blog1]: https://www.confluent.io/blog/spring-for-apache-kafka-deep-dive-part-1-error-handling-message-conversion-transaction-support
 [blog2]: https://www.confluent.io/blog/spring-for-apache-kafka-deep-dive-part-2-apache-kafka-spring-cloud-stream
