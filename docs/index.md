@@ -112,17 +112,15 @@ All that's required to get the `LoansourceApplication` microservice to act as a 
   }
 ```
 
-`Supplier<>` is a Java function data type. Because there is only one `@Bean` of this type declared in this application, Spring Cloud Stream knows exactly what to do next. By default it will trigger this function once every second and send the result to the default output `MessageChannel`. The generated Loan objects are then automatically sent as messages on our default message channel (called `output`). 
+`Supplier<>` is a Java function data type. Because there is only one `@Bean` that returns this type in this application, Spring Cloud Stream knows exactly what to do next. By default it will trigger this function once every second and send the result to the default "output" `MessageChannel`.
 
 > What's nice about this is that you can test the function using a regular unit test.
 
 #### The Loancheck Microservice
 
-The `loancheck` microservice is a bit more complex as it sorts messages, but not overly so.
+The `loancheck` microservice is a bit more complex but not much. It's job is to sort the `Loan` messages into channels. In order to do this, it is subscribing to the messages coming from the source's `output` topic and then sending them into either the `approved` or `declined` topics based on the message's content (specifically the amount of the loan, similar to a fraud checking facility).
 
-The `loancheck` microservice is subscribing to the messages coming from the `output` topic and then sending them into either the `approved` or `declined` topics based on the message's content (specifically the amount of the loan, similar to a fraud checking facility).
-
-Beacuse 3 message channels are involved, a simple `LoanProcessor` component is used to specify the input and output `MessageChannel`'s which looks something like this:
+Beacuse 3 message channels are involved, a simple `LoanProcessor` interface is used to clarify the input and output `MessageChannel`'s which looks something like this:
 
 ```java
 @Component
@@ -143,17 +141,17 @@ public interface LoanProcessor {
 }
 ```
 
-A `@Component` called the `LoanChecker` receives this `LoanProcessor` in it's constructor. Then, it's method `checkAndSortLoans(Loan)` is called automatically by the Spring Cloud Stream whenever a new `Loan` message arrives. This is because the method is annotated with the `@StreamListener(LoanProcessor.APPLICATIONS_IN)` annotation.
+A `@Component` called the `LoanChecker` receives this `LoanProcessor` in it's constructor. Then, it's method `checkAndSortLoans(Loan)` is called automatically by Spring Cloud Stream whenever a new `Loan` message arrives. This is because the method is annotated with the `@StreamListener(LoanProcessor.APPLICATIONS_IN)` annotation.
 
 The `Loan` objects are then sorted using simple business logic, and depending on the outcome, sent to either the `processor.approved()` channel or the `processor.declined()` channel (after having their status set accordingly).
 
 ## Final Thoughts
 
-As you can see, the separation of concerns introduced between the messaging logic and the messaging infrastructure is very healthy indeed. There is absolutely zero Kafka or RabbitMQ specific code in either application. This allows developers to focus on the business logic regardless of the messaging platform. There is very little messaging boilerplate and you can easily swap messaging solutions simply by changing the "binder" dependencies in the application POM.
+That's it! As you can see, the separation of concerns introduced between the messaging logic and the messaging infrastructure is very healthy indeed. There is absolutely zero Kafka or RabbitMQ specific code in either application. This allows developers to focus on the business logic regardless of the messaging platform. There is very little messaging boilerplate and you can easily swap messaging solutions simply by changing the "binder" dependencies in the application POM.
 
 ## There's More...
 
-Keep up to date with the latest information on Spring Cloud Stream visit the projects dedicated [website][project]. At the time of writing, the messaging platforms supported by bindings for Spring Cloud Stream include [Kafka][kafka], [RabbitMQ][rabbit], [Amazon Kinesis][amazon], [Google PubSub][google], and [Azure Event Hub][azure].
+To keep up to date with the latest information on Spring Cloud Stream visit the projects dedicated [project page][project] on the Spring website. At the time of writing, the messaging platforms supported as bindings for Spring Cloud Stream include [Kafka][kafka], [RabbitMQ][rabbit], [Amazon Kinesis][amazon], [Google PubSub][google], and [Azure Event Hub][azure].
 
 To create your own Spring project from scratch, use the project configurator at [start.spring.io][initializr].
 
