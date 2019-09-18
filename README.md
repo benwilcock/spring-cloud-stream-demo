@@ -18,7 +18,7 @@ This server-side runs on [Docker for Mac][docker] and includes: [Kafka][kafka], 
 [stream-docs]: https://docs.spring.io/spring-cloud-stream/docs/current/reference/htmlsingle/
 [boot]: https://spring.io/projects/spring-boot
 [stream]: https://spring.io/projects/spring-cloud-stream
-[maven]: http://maven.apache.org/
+[maven]: https://maven.apache.org/
 [java]: https://openjdk.java.net/projects/jdk/11/
 [docker]: https://www.docker.com/
 [kafka]: https://kafka.apache.org/

@@ -12,15 +12,6 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-/**
- * The @EnableBinding annotation specifies that the `LoansourceApplication` is acting as a `Source` of messages.
- * By declaring our class as a `Source` will are asking Spring Cloud Stream to create a
- * `MessageChannel` (called "output" by default). Any messages we create will be placed on this channel. Spring Cloud
- * Stream will take care of creating this channel using our underlying messaging technology (defined
- * by the Binding JAR on our classpath (either Rabbit or Kafka in this demo, depending on the Maven
- * profile chosen).
- */
-
 @SpringBootApplication
 public class LoansourceApplication {
 
