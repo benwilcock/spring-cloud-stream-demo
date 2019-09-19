@@ -22,6 +22,8 @@ First, clone the code repository from GitHub. To do this, in a new terminal wind
 git clone https://github.com/benwilcock/spring-cloud-stream-demo.git
 ```
 
+> The assumption here is that you have Git installed. If you don't, download and extract [this zip file][zip].
+
 Upon inspection you'll notice that this repository consists of two microservices. The first microservice (in the `loansource` folder) acts as the source of event messages. These events are Loan applications similar to what you'd see in the world of banking and finance. Each Loan application has a "name" and an "amount" associated with it, and a "status" which is set to `PENDING` at first. The second microservice (in the `loancheck` folder) is a loan event processor which checks these loan requests and sorts them into `APPROVED` or `DECLINED` states.
 
 To run the demo, follow the 5 steps below.
@@ -197,5 +199,6 @@ If you'd like to go deeper with Spring and pure Kafka? Check out these great blo
 [rabbit-ui]: http://localhost:15672
 [docker-for-mac]: https://docs.docker.com/docker-for-mac/install/
 
+[zip]: https://github.com/benwilcock/spring-cloud-stream-demo/archive/master.zip
 [blog1]: https://www.confluent.io/blog/spring-for-apache-kafka-deep-dive-part-1-error-handling-message-conversion-transaction-support
 [blog2]: https://www.confluent.io/blog/spring-for-apache-kafka-deep-dive-part-2-apache-kafka-spring-cloud-stream
