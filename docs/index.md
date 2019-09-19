@@ -14,15 +14,15 @@ When you run this demo you'll see exactly how Spring Cloud Stream's clever abstr
 
 > This demo supports the **[Kafka][kafka]** and **[RabbitMQ][rabbit]** bindings but others are available including [Amazon Kinesis][amazon], [Azure Event Hub][azure], [Google PubSub][google], and more.
 
-### Getting Started
+### Running the Demo
 
-Clone the code repository from GitHub. To do this, in a new terminal window issue the following command.
+First, clone the code repository from GitHub. To do this, in a new terminal window issue the following command.
 
 ```bash
 git clone https://github.com/benwilcock/spring-cloud-stream-demo.git
 ```
 
-Upon inspection you'll notice that this repository consists of two microservices. The first microservice (`loansource`) acts as the source of  event messages. These events are Bank Loan applications. Each loan application has a "name", an "amount", and a "status". The second microservice (`loancheck`) is an event processor which checks these loan requests and sorts them into "approved" or "declined".
+Upon inspection you'll notice that this repository consists of two microservices. The first microservice (in the `loansource` folder) acts as the source of event messages. These events are Loan applications similar to what you'd see in the world of banking and finance. Each Loan application has a "name" and an "amount" associated with it, and a "status" which is set to `PENDING` at first. The second microservice (in the `loancheck` folder) is a loan event processor which checks these loan requests and sorts them into `APPROVED` or `DECLINED` states.
 
 To run the demo, follow the 5 steps below.
 
