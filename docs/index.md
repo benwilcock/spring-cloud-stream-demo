@@ -61,7 +61,7 @@ In a new terminal window, make the `/loansource` directory the current directory
 ./mvnw clean package spring-boot:run -DskipTests=true -P<profile-choice>
 ```
 
-Once the `loansource` application has started, in the terminal window, you should see a message every second telling you that a new Loan event has been created and it's in the `PENDING` state. Leave this mocroservice running in the terminal and move onto the next step.
+Once the `loansource` application has started, in the terminal window, you should see a message every second telling you that a new Loan event has been created and it's in the `PENDING` state. Leave this microservice running in the terminal and move onto the next step.
 
 #### Step 4: Process the Loan Events
 
@@ -115,13 +115,13 @@ All that's required to get the `LoansourceApplication` microservice to act as a 
 
 ```java
 @Bean
-  public Supplier<Loan> supplyLoan() {
-    return () -> {
-      Loan loan = new Loan(UUID.randomUUID().toString(), "Ben", 10000L);
-      LOG.info("{} {} for ${} for {}", loan.getStatus(), loan.getUuid(), loan.getAmount(), loan.getName());
-      return loan;
-    };
-  }
+public Supplier<Loan> supplyLoan() {
+  return () -> {
+    Loan loan = new Loan(UUID.randomUUID().toString(), "Ben", 10000L);
+    LOG.info("{} {} for ${} for {}", loan.getStatus(), loan.getUuid(), loan.getAmount(), loan.getName());
+    return loan;
+  };
+}
 ```
 
 `Supplier<>` is a Java function data type. Because there is only one `@Bean` that returns this type in this application, Spring Cloud Stream knows exactly what to do next. By default it will trigger this function once every second and send the result to the default "output" `MessageChannel`.
