@@ -73,7 +73,7 @@ Once the `loancheck` application has started, in the terminal window, you should
 
 #### Step 5: Stopping the Demo
 
-Once you're done with the demo applications, in each of the terminal windows for the `/loansource` and the `/loancheck` microservices press `Ctrl-C`. The application will come to a halt and message processing will stop.
+Once you're done with the microservices, in each of the terminal windows for the `/loansource` and the `/loancheck` microservices press `Ctrl-C`. The application will come to a halt and the event processing will stop.
 
 If you're switching modes between Kafks and Rabbit, simply go back to **Step 2** and repeat the process.
 
