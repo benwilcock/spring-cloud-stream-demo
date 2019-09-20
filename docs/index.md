@@ -14,7 +14,7 @@ When you run this demo you'll see exactly how Spring Cloud Stream's clever abstr
 
 ## Before you start
 
-These event driven microservices need a two things installed on your PC[^1]:
+These event driven microservices need the latest of these applications installed on your PC[^1]:
 
 1. [Java 8][java]
 2. [Docker for Mac][docker-for-mac]
@@ -48,7 +48,7 @@ This will start [Kafka][kafka-project] and [RabbitMQ][rabbit-project] and stream
 
 ### Step 2: Choose Between Kafka or RabbitMQ Mode
 
-In steps 3 & 4 which follow, where we issue our Maven commands to build and run the microservices,we must substitute the **`-P<profile-choice>`** with the name of the messaging mode in which we'd like run.
+In steps 3 & 4 which follow, where we issue our Maven commands to build and run the microservices, we must substitute the **`-P<profile-choice>`** with the name of the messaging mode in which we'd like run.
 
 * For **Kafka** mode, substitute: **`-Pkafka`**
 * For **RabbitMQ** mode, substitute: **`-Prabbit`**
@@ -198,7 +198,7 @@ You can see the events flowing through the messaging platforms as follows:
 
 * For **Kafka** the [KafDrop][kafdrop] tool on [`localhost:9000`][kafdrop-ui] may be used to observe the topics and the event messages. There is no login required.
 
-* For **RabbitMQ** the Rabbit Management Console can be found on [`localhost:15672`][rabbit-ui] may be used to observe the exchanges and the event messages. To login the username is `guest` and the password is also `guest`. To observe actual message content, you may need to create a queue manually and bind it to the topic using `#` as your routing key.
+* For **RabbitMQ** the Rabbit Management Console can be found on [`localhost:15672`][rabbit-ui] may be used to observe the exchanges and the event messages. To login the username is `guest` and the password is also `guest`. To observe the actual message contents, you may need to create a Queue manually and bind it to the desired topic using `#` as your `routing key`.
 
 To keep up to date with the latest information on Spring Cloud Stream visit the projects dedicated [project page][project] on the Spring website.
 
@@ -210,7 +210,11 @@ If you'd like to go deeper with Spring and pure Kafka check out these great blog
 
 2. [Soby Chacko: Spring for Apache Kafka Deep Dive: Apache Kafka and Spring Cloud Stream][blog2]
 
-[^1]: The code is written and packaged using [Maven][maven], [Spring Boot][boot], and [Spring Cloud Stream][project]. At runtime the code relies on [Kafka][kafka-project], [Zookeeper][zookeeper-project], [RabbitMQ][rabbit-project], and [KafDrop][kafdrop] (a Docker image by by Obsidian Dynamics). Everything in this list has been provided for you - you don't need to install them.
+
+---
+### Footnotes 
+
+[^1]: The microservice code in this repository is written and packaged using [Maven][maven], [Spring Boot][boot], and [Spring Cloud Stream][project]. At runtime the code relies on [Kafka][kafka-project], [Zookeeper][zookeeper-project], [RabbitMQ][rabbit-project], and [KafDrop][kafdrop] (a Docker image by by Obsidian Dynamics). Everything in this list has been provided for you - you don't need to install them.
 
 [project]: https://spring.io/projects/spring-cloud-stream
 [docs]: https://docs.spring.io/spring-cloud-stream/docs/current/reference/htmlsingle/
