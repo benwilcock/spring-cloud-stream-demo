@@ -15,7 +15,7 @@
     <description>Acts as a source of Loan messages. Uses Spring Cloud Stream</description>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>8</java.version>
         <!-- using the latest spring-cloud-stream version directly (not via DepMgmnt) -->
         <spring-cloud-stream.version>2.2.1.RELEASE</spring-cloud-stream.version>
     </properties>
