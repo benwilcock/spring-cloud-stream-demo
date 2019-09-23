@@ -28,7 +28,11 @@ First, clone the code repository from GitHub. To do this (if you have Git instal
 git clone https://github.com/benwilcock/spring-cloud-stream-demo.git
 ```
 
-Upon inspection of the code you'll notice that this repository consists of two microservices. The first microservice (in the `/loansource` folder) acts as the source of event messages. These events are Loan applications similar to what you'd see in the world of banking and finance. Each Loan application has a "name" and an "amount" associated with it, and a "status" which is set to `PENDING` at first. The second microservice (in the `/loancheck` folder) is a loan event processor which checks these loan requests and sorts them into `APPROVED` or `DECLINED` states.
+Upon inspection of the code you'll notice that this repository consists of two microservices. 
+
+1. The `Loansource` microservice (in the `/loansource` folder). This microservice acts as a source of event messages. These events are `Loan` applications similar to what you'd see in the world of banking and finance. Each loan has a "name", an "amount", and a "status" (which is set to `PENDING` at first).
+
+2. The `Loancheck` microservice (in the `/loancheck` folder). This microservice acts as a `Loan` processor. It checks which loans are good ones to make and sorts them into `APPROVED` or `DECLINED` states.
 
 To run the demo, follow the instructions below.
 
