@@ -115,7 +115,7 @@ Your choice of Maven profile also influences the `spring.profiles.active` proper
 
 #### The Loansource Microservice
 
-All that's required to get the `LoansourceApplication` microservice to act as a source of `Loan` messages is to declare an `@Bean` method which generates and returns a `Supplier<>`, in this case it's a `Supplier` of type `Loan`.
+For the Loansource misroservice we're leaning on a new feature that arrived in Spring Cloud Stream v2.1 - [Spring Cloud Function support][function-support]. With this new feature, all that's required to get the `LoansourceApplication` microservice to act as a source of `Loan` messages is to declare an `@Bean` method which generates and returns a `Supplier<>`. In this case it's a `Supplier` of type `Loan`. The function method code looks something like this...
 
 ```java
 @Bean
@@ -128,9 +128,11 @@ public Supplier<Loan> supplyLoan() {
 }
 ```
 
-`Supplier<>` is a Java function data type. Because there is only one `@Bean` that returns this type in this application, Spring Cloud Stream knows exactly what to do next. By default it will trigger this function once every second and send the result to the default "output" `MessageChannel`.
+`Supplier<>` is a Java function data type. Because there is only one `@Bean` method that returns this type, Spring Cloud Stream knows exactly what to do next. By default it will trigger this function once every second and send the result to the default `MessageChannel` named "output". What's nice about this function method is that it only contains business logic so you can test it using a regular unit test.
 
-> What's nice about this is that you can test the function using a regular unit test.
+> We could use the `spring.cloud.function.definition` property in the `application.properties` file to explicitly declare which function bean we want to be bound to binding destinations - but for cases when you only have single `@Bean` defined, this is not necessary.
+
+> If we wanted to use a different poller interval, we can use the `spring.integration.poller.fixed-delay` property in the `application.properties` file.
 
 #### The Loancheck Microservice
 
@@ -243,3 +245,4 @@ If you'd like to go deeper with Spring and pure Kafka check out these great blog
 [maven]: https://maven.apache.org/
 [java]: https://adoptopenjdk.net/
 [git-install]: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git
+[function-support]: https://cloud.spring.io/spring-cloud-stream/reference/html/spring-cloud-stream.html#spring_cloud_function
