@@ -6,7 +6,7 @@ You just want to write logic for your event driven application, but the boilerpl
 
 ## The Solution
 
-Let a flexible messaging abstraction take care of the complex messaging platform integration so you can concentrate on writing simple clean buiness logic. [Spring Cloud Stream][docs] is a great candidate. It unifies lots of popular messaging platforms behind one easy to use API. It even smoothes away the subtle differences in approach and features between these platforms (like partitioning or exchanges for example) leaving you free to create innovative event-driven solutions.
+Let a flexible messaging abstraction take care of the complex messaging platform integration so you can concentrate on writing simple clean buiness logic. [Spring Cloud Stream][docs] is a great candidate. It unifies lots of popular messaging platforms behind one easy to use API. It even smoothes away any subtle differences in approach and features between these platforms (like partitioning or exchanges for example) leaving you free to create innovative event-driven solutions.
 
 When you run this demo you'll see exactly how Spring Cloud Stream's clever abstractions help make event streaming code cleaner and easier to work with. You'll also see how trivial it is to switch between different messaging platforms using `binding` libraries. 
 
@@ -20,7 +20,7 @@ These event driven microservices need the latest of these applications installed
 2. [Docker for Mac][docker-for-mac]
 3. [Git][git-install] (optional)
 
-## Getting Started
+## Running The Demo
 
 First, clone the code repository from GitHub. To do this (if you have Git installed) open a new terminal window and issue the following command. If you don't have Git installed, download and extract [this zip file][zip].
 
@@ -30,11 +30,9 @@ git clone https://github.com/benwilcock/spring-cloud-stream-demo.git
 
 Upon inspection of the code you'll notice that this repository consists of two microservices. The first microservice (in the `/loansource` folder) acts as the source of event messages. These events are Loan applications similar to what you'd see in the world of banking and finance. Each Loan application has a "name" and an "amount" associated with it, and a "status" which is set to `PENDING` at first. The second microservice (in the `/loancheck` folder) is a loan event processor which checks these loan requests and sorts them into `APPROVED` or `DECLINED` states.
 
-To run the demo, follow the 5 steps outlined below.
+To run the demo, follow the instructions below.
 
 ### Step 1: Start the Messaging Servers
-
-We've included a `docker-compose` configuration which will start both the [Kafka][kafka-project] and the [RabbitMQ][rabbit-project] servers at the same time and then leave them running in the background.
 
 In a fresh terminal window, go to the root folder of the project and issue the following command.
 
@@ -42,22 +40,22 @@ In a fresh terminal window, go to the root folder of the project and issue the f
 ./start-servers.sh
 ```
 
-> You'll need ["Docker for Mac"][docker-for-mac] to be installed and running on your system for this script to work properly.
+This script will start [Kafka][kafka-project] and [RabbitMQ][rabbit-project] and stream the log output from both to the terminal window (unless you exit with `Ctrl-C`). The servers do not stop when you press `Ctrl-C` - they'll keep running in the background. Once started these servers will all be available to applications running on your computer.
 
-This will start [Kafka][kafka-project] and [RabbitMQ][rabbit-project] and stream the log output from both to the terminal window (unless you exit with `Ctrl-C`). The servers do not stop when you press `Ctrl-C` - they'll keep running in the background. Once started these servers will all be available to applications running on your computer.
+> You'll need ["Docker for Mac"][docker-for-mac] to be installed and running on your system for this script to work properly as it requires `docker-compose`.
 
 ### Step 2: Choose Between Kafka or RabbitMQ Mode
 
-In steps 3 & 4 which follow, where we issue our Maven commands to build and run the microservices, we must substitute the **`-P<profile-choice>`** with the name of the messaging mode in which we'd like run.
+In steps 3 & 4 which follow, where we issue our Maven commands to build and run the microservices, we must substitute the **`-P<profile-choice>`** with the name of the messaging platform which we'd like to use.
 
-* For **Kafka** mode, substitute: **`-Pkafka`**
-* For **RabbitMQ** mode, substitute: **`-Prabbit`**
+* For **Kafka**, use: **`-Pkafka`**
+* For **RabbitMQ**, use: **`-Prabbit`**
 
-If you omit the `-P<profile-choice>` setting completely, then `-Pkafka` is assumed.
+If you omit the `-P<profile-choice>` setting completely, then Kafka is assumed.
 
 > Note: This demo is __not__ designed to "bridge" messages between Kafka and RabbitMQ, so be sure to choose the same profile name in each of the two applications when you compile and run them. If bridging messaging systems is your goal [see the documentation here][multi-connect].
 
-### Step 3: Generate New Loan Events
+### Step 3: Generate Some Loan Events
 
 In a new terminal window, make the `/loansource` directory the current directory using `cd`, and then issue the following command substituting the `<profile-choice>` with the mode you'd like to run (either `kafka` or `rabbit` mode as discussed in step 2 above).
 
@@ -65,7 +63,7 @@ In a new terminal window, make the `/loansource` directory the current directory
 ./mvnw clean package spring-boot:run -DskipTests=true -P<profile-choice>
 ```
 
-Once the `loansource` application has started, in the terminal window, you should see a message every second telling you that a new Loan event has been created and it's in the `PENDING` state. Leave this microservice running in the terminal and move onto the next step.
+Once the `loansource` application has started, in the terminal window, you should see a message every second telling you that a new Loan event has been posted to the messaging platform in the `PENDING` state. Leave this microservice running and move onto the next step.
 
 ### Step 4: Process The Loan Events
 
@@ -75,15 +73,15 @@ In another new terminal window, make the `/loancheck` directory your current dir
 ./mvnw clean package spring-boot:run -DskipTests=true -P<profile-choice>
 ```
 
-Once the `loancheck` application has started, in the terminal window, you should see a message every second telling you that a new Loan application has been either `APPROVED` or `DECLINED`. Skip ahead to "How It Works" if you'd like to understand how these applications were built.
+Once the `loancheck` application has started, in the terminal window, you should see a message every second telling you that a new `PENDING` Loan application has been read from the messaging platform and either `APPROVED` or `DECLINED`. Skip ahead to "How It Works" if you'd like to understand how these applications were built.
 
-### Step 5: Stopping the Demo
+### Step 5: Stop the Demo
 
 Once you're done with the microservices, in each of the terminal windows for the `/loansource` and the `/loancheck` microservices press `Ctrl-C`. The application will come to a halt and the event processing will stop.
 
 If you're switching modes between Kafks and Rabbit, simply go back to **Step 2** and repeat the process.
 
-If you're completely done with the demo and would like to stop the Kafka and RabbitMQ servers, in a terminal window in the root folder of the project run the `./stop-servers.sh` script. This isn't necessary if you're just switching between modes.
+If you're completely done with the demo and would also like to stop the Kafka and RabbitMQ servers, in a terminal window in the root folder of the project run the `./stop-servers.sh` script. This isn't necessary if you're just switching between modes.
 
 ## How it Works
 
@@ -115,7 +113,7 @@ Your choice of Maven profile also influences the `spring.profiles.active` proper
 
 #### The Loansource Microservice
 
-For the Loansource misroservice we're leaning on a new feature that arrived in Spring Cloud Stream v2.1 - [Spring Cloud Function support][function-support]. With this new feature, all that's required to get the `LoansourceApplication` microservice to act as a source of `Loan` messages is to declare an `@Bean` method which generates and returns a `Supplier<>`. In this case it's a `Supplier` of type `Loan`. The function method code looks something like this...
+For the Loansource misroservice we're using a new feature from Spring Cloud Stream v2.1 - [Spring Cloud Function support][function-support]. With this new feature, all that's required to get the `LoansourceApplication` microservice to act as a source of `Loan` messages is to declare an `@Bean` method which generates and returns a `Supplier<>`. In this case it's a `Supplier` of type `Loan`. The function method code looks something like this...
 
 ```java
 @Bean
@@ -136,9 +134,9 @@ public Supplier<Loan> supplyLoan() {
 
 #### The Loancheck Microservice
 
-The `loancheck` microservice is a bit more complex, but not much. It's job is to sort the `Loan` events into channels. In order to do this, it is subscribing to the events coming from the source's `output` topic and then sending them into either the `approved` or `declined` topics based on the the value of the loan, similar to a fraud checking facility.
+The `loancheck` microservice requires a little bit more code, but not much. It's job is to sort the `Loan` events into separate channels. In order to do this, it is subscribing to the events coming from the source's `output` topic and then sending them into either the `approved` or `declined` topics based on the the value of the loan, similar to a fraud checking facility.
 
-The first thing of note is that beacuse we're using 3 messaging channels, a simple `LoanProcessor` interface is used to clarify the inputs and the outputs. It looks something like this:
+Beacuse we're using 3 messaging channels (one inbound and two outbound), a simple `LoanProcessor` interface is used to clarify the inputs and the outputs. It looks something like this:
 
 ```java
 @Component
@@ -172,7 +170,7 @@ public class LoanCheckApplication {
 }
 ```
 
-A Spring `@Component` called the `LoanChecker.java` is also constructed with a `LoanProcessor` at runtime and its `checkAndSortLoans(Loan)` method is called automatically by Spring Cloud Stream whenever a new `Loan` event arrives. This is because this particular method has been annotated with the `@StreamListener(LoanProcessor.APPLICATIONS_IN)` annotation as you can see in the following code snippet.
+In addition, a Spring `@Component` called the `LoanChecker.java` is constructed with this `LoanProcessor` at runtime. Furthermore, this component's `checkAndSortLoans(Loan)` method is called automatically whenever a new `Loan` event arrives because it's been annotated as a `@StreamListener()` for the `LoanProcessor.APPLICATIONS_IN` channel. You can see this annotation being used in the following code sample.
 
 ```java
   @StreamListener(LoanProcessor.APPLICATIONS_IN)
@@ -188,11 +186,11 @@ A Spring `@Component` called the `LoanChecker.java` is also constructed with a `
   }
 ```
 
-This method sorts the `Loan` objects using simple business logic, and depending on the outcome it sends them onwards to either the `processor.approved()` channel or the `processor.declined()` channel (after setting their Loan Status accordingly).
+This method then sorts the `Loan` objects using simple business logic. Depending on the outcome of the sort it sends them onwards to either the `processor.approved()` channel or the `processor.declined()` channel (after setting their Loan Status accordingly).
 
 ## Wrapping Up
 
-As you can see, the separation of concerns you get with [Spring Cloud Streams][project] between the messaging logic and the messaging platform is very healthy indeed. There is absolutely zero Kafka or RabbitMQ specific code in either microservice. This allows us to focus more time on the business logic regardless of the messaging platform. There is very little messaging code required and you can easily swap messaging solutions simply by changing the "binder" dependencies in the application POM.
+As you can see, the separation of concerns that you get when using [Spring Cloud Streams][project] is very healthy indeed. There is absolutely zero Kafka or RabbitMQ specific code in either microservice. This allows us to focus on the business logic regardless of the messaging platform and you can easily swap messaging platforms simply by changing the "binder" dependencies in the application POM.
 
 ## There's More...
 
