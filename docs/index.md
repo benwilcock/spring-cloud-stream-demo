@@ -1,24 +1,25 @@
-# Simple Event Driven Microservices
+# Simple Event Driven Microservices with Spring Cloud Stream
+
+Event driven architecture is great. But without a framework, writing the scaffolding required to work with popular event messaging platforms can be messy. In this post we'll take a look at how  [Spring Cloud Stream][project] can be used to simplify your code.
 
 ## The Problem
 
-You just want to write logic for your event driven application, but the boilerplate messaging code is getting in the way and it's costing you time.  Connecting your apps to event messaging services is cumbersome, and if you're an enterprise developer, you probably need to work with multiple messaging technologies over time.
+You just want to write logic for your event driven application, but the boilerplate messaging code can get in the way.  Connecting your apps to messaging services is tricky, and if you're an enterprise developer, you probably need to work with multiple messaging technologies (either on-premises or in the cloud).
 
 ## The Solution
 
-Let a flexible messaging abstraction take care of the complex messaging platform integration so you can concentrate on writing simple clean buiness logic. [Spring Cloud Stream][docs] is a great candidate. It unifies lots of popular messaging platforms behind one easy to use API. It even smoothes away any subtle differences in approach and features between these platforms (like partitioning or exchanges for example) leaving you free to create innovative event-driven solutions.
+Let a flexible messaging abstraction take care of the complex messaging platform integration so you can concentrate on writing simple clean business logic. [Spring Cloud Stream][docs] is a great candidate. It unifies lots of popular messaging platforms behind one easy to use API including RabbitMQ, Apache Kafka, Amazon Kinesis, Google PubSub, Solace PubSub+, Azure Event Hubs, and Apache RocketMQ. It even smoothes away any subtle differences in approach and features between these platforms (like partitioning or exchanges for example) leaving you free to create innovative event-driven solutions.
 
-When you run this demo you'll see exactly how Spring Cloud Stream's clever abstractions help make event streaming code cleaner and easier to work with. You'll also see how trivial it is to switch between different messaging platforms using `binding` libraries. 
-
-> This demo supports both **[Kafka][kafka]** and **[RabbitMQ][rabbit]** bindings but others are available including [Amazon Kinesis][amazon], [Azure Event Hub][azure], [Google PubSub][google], and more.
+In the demo that follows, you'll see exactly how Spring Cloud Stream's clever abstractions help make event streaming code cleaner and easier to work with. You'll also see how trivial it is to switch between two different messaging platforms ([RabbitMQ][rabbit-project] or [Kafka][kafka-project]) using Spring Cloud Stream's `binding` libraries. 
 
 ## Before you start
 
 These event driven microservices need the latest of these applications installed on your PC[^1]:
 
 1. [Java 8][java]
-2. [Docker for Mac][docker-for-mac]
+2. [Docker][docker-for-mac] (where we'll run RabbitMQ and Kafka locally)
 3. [Git][git-install] (optional)
+4. Bash (assumed, although alternatives could work) 
 
 ## Running The Demo
 
@@ -40,22 +41,22 @@ To run the demo, follow the instructions below.
 
 In a fresh terminal window, go to the root folder of the project and issue the following command.
 
+> You'll need ["Docker"][docker-for-mac] to be installed and running on your system for this script to work properly as it requires `docker-compose`.
+
 ```bash
 ./start-servers.sh
 ```
 
 This script will start [Kafka][kafka-project] and [RabbitMQ][rabbit-project] and stream the log output from both to the terminal window (unless you exit with `Ctrl-C`). The servers do not stop when you press `Ctrl-C` - they'll keep running in the background. Once started these servers will all be available to applications running on your computer.
 
-> You'll need ["Docker for Mac"][docker-for-mac] to be installed and running on your system for this script to work properly as it requires `docker-compose`.
-
 ### Step 2: Choose Between Kafka or RabbitMQ Mode
 
-In steps 3 & 4 which follow, where we issue our Maven commands to build and run the microservices, we must substitute the **`-P<profile-choice>`** with the name of the messaging platform which we'd like to use.
+In steps 3 & 4 which follow, we must substitute the **`-P<profile-choice>`** with the name of the messaging platform which we'd like to use.
 
 * For **Kafka**, use: **`-Pkafka`**
 * For **RabbitMQ**, use: **`-Prabbit`**
 
-If you omit the `-P<profile-choice>` setting completely, then Kafka is assumed.
+If you omit the `-P<profile-choice>` setting completely, then Kafka is used.
 
 > Note: This demo is __not__ designed to "bridge" messages between Kafka and RabbitMQ, so be sure to choose the same profile name in each of the two applications when you compile and run them. If bridging messaging systems is your goal [see the documentation here][multi-connect].
 
@@ -83,13 +84,13 @@ Once the `loancheck` application has started, in the terminal window, you should
 
 Once you're done with the microservices, in each of the terminal windows for the `/loansource` and the `/loancheck` microservices press `Ctrl-C`. The application will come to a halt and the event processing will stop.
 
-If you're switching modes between Kafks and Rabbit, simply go back to **Step 2** and repeat the process.
+If you're switching modes between Kafka and Rabbit, simply go back to **Step 2** and repeat the process.
 
-If you're completely done with the demo and would also like to stop the Kafka and RabbitMQ servers, in a terminal window in the root folder of the project run the `./stop-servers.sh` script. This isn't necessary if you're just switching between modes.
+> If you're completely done with the demo and would also like to stop the Kafka and RabbitMQ servers, in a terminal window in the root folder of the project run the `./stop-servers.sh` script. This isn't necessary if you're just switching between modes.
 
 ## How it Works
 
-Maven profiles control which of the Spring Cloud Stream bindings are added as dependencies when you build. If you choose `-Pkafka` then the `[spring-cloud-stream-binder-kafka][kafka]` dependency is added to the project. If you choose `-Prabbit` then the `[spring-cloud-stream-binder-rabbit][rabbit]` dependency is added.
+Maven profiles (in each project's `pom.xml`) control which of the Spring Cloud Stream bindings are added as dependencies when you build. When you choose `-Pkafka` then the `[spring-cloud-stream-binder-kafka][kafka]` dependency is added to the project. When you choose `-Prabbit` then the `[spring-cloud-stream-binder-rabbit][rabbit]` dependency is added.
 
 ```xml
 <profiles>
@@ -140,7 +141,7 @@ public Supplier<Loan> supplyLoan() {
 
 The `loancheck` microservice requires a little bit more code, but not much. It's job is to sort the `Loan` events into separate channels. In order to do this, it is subscribing to the events coming from the source's `output` topic and then sending them into either the `approved` or `declined` topics based on the the value of the loan, similar to a fraud checking facility.
 
-Beacuse we're using 3 messaging channels (one inbound and two outbound), a simple `LoanProcessor` interface is used to clarify the inputs and the outputs. It looks something like this:
+Beacuse we're using 3 messaging channels (one inbound and two outbound), a simple `LoanProcessor` interface is used to clarify the inputs and the outputs. Currently, it looks something like this:
 
 ```java
 @Component
@@ -194,7 +195,7 @@ This method then sorts the `Loan` objects using simple business logic. Depending
 
 ## Wrapping Up
 
-As you can see, the separation of concerns that you get when using [Spring Cloud Streams][project] is very healthy indeed. There is absolutely zero Kafka or RabbitMQ specific code in either microservice. This allows us to focus on the business logic regardless of the messaging platform and you can easily swap messaging platforms simply by changing the "binder" dependencies in the application POM.
+As you can see, the separation of concerns that you get when using [Spring Cloud Streams][project] is very healthy indeed. There is absolutely zero Kafka or RabbitMQ specific code in either microservice. This allows us to focus on the business logic regardless of the messaging platform and you can easily swap messaging platforms simply by changing the "binder" dependencies in the project's `pom.xml`.
 
 ## There's More...
 
@@ -213,7 +214,6 @@ If you'd like to go deeper with Spring and pure Kafka check out these great blog
 1. [Gary Russell: Spring for Apache Kafka Deep Dive: Error Handling, Message Conversion and Transaction Support][blog1]
 
 2. [Soby Chacko: Spring for Apache Kafka Deep Dive: Apache Kafka and Spring Cloud Stream][blog2]
-
 
 ---
 ### Footnotes 
