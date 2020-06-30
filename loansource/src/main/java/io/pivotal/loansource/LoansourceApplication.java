@@ -5,7 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.messaging.Message;
+import reactor.core.publisher.Flux;
 
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -25,13 +28,16 @@ public class LoansourceApplication {
   }
 
   @Bean
-  public Supplier<Loan> supplyLoan() {
-    return () -> {
-      String rName = names.get(new Random().nextInt(names.size()));
-      Long rAmount = amounts.get(new Random().nextInt(amounts.size()));
-      Loan loan = new Loan(UUID.randomUUID().toString(), rName, rAmount);
+  public Supplier<Loan> supplyLoan(){
+
+    Supplier<Loan> loanSupplier = () -> {
+      Loan loan = new Loan(UUID.randomUUID().toString(),
+              names.get(new Random().nextInt(names.size())),
+              amounts.get(new Random().nextInt(amounts.size())));
       log.info("{} {} for ${} for {}", loan.getStatus(), loan.getUuid(), loan.getAmount(), loan.getName());
       return loan;
     };
+
+    return loanSupplier;
   }
 }
