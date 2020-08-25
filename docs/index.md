@@ -8,7 +8,7 @@ You just want to write logic for your event driven application, but the boilerpl
 
 ## The Solution
 
-Let a flexible messaging abstraction take care of the complex messaging platform integration so you can concentrate on writing simple clean business logic. [Spring Cloud Stream][docs] is a great candidate. It unifies lots of popular messaging platforms behind one easy to use API including RabbitMQ, Apache Kafka, Amazon Kinesis, Google PubSub, Solace PubSub+, Azure Event Hubs, and Apache RocketMQ. It even smoothes away any subtle differences in approach and features between these platforms (like partitioning or exchanges for example) leaving you free to create innovative event-driven solutions.
+Let a flexible messaging abstraction take care of the complex messaging platform integration so you can concentrate on writing simple clean business logic. [Spring Cloud Stream][docs] is a great candidate. It unifies lots of popular messaging platforms behind one easy to use API including RabbitMQ, Apache Kafka, Amazon Kinesis, Google Cloud Pub/Sub, Solace PubSub+, Azure Event Hubs, and Apache RocketMQ. It even smoothes away any subtle differences in approach and features between these platforms (like partitioning or exchanges for example) leaving you free to create innovative event-driven solutions.
 
 In the demo that follows, you'll see exactly how Spring Cloud Stream's clever abstractions help make event streaming code cleaner and easier to work with. You'll also see how trivial it is to switch between two different messaging platforms ([RabbitMQ][rabbit-project] or [Kafka][kafka-project]) using Spring Cloud Stream's `binding` libraries. 
 
